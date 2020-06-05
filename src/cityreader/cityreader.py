@@ -23,28 +23,29 @@ class City:
         self.lat = lat
         self.lon = lon
     def __repr__(self):
-        return f"{self.name}, {self.lat}, {self.lon}"
+        return f"{self.name}: ({self.lat}, {self.lon})"
 cities = []
 
-def cityreader():
+def cityreader(cities=[]):
   # TODO Implement the functionality to read from the 'cities.csv' file
   # For each city record, create a new City instance and add it to the 
   # `cities` list
     with open('cities.csv') as cities_csv:
+        csv_reader = csv.reader(cities_csv, delimiter=',')
         line_count = 0
-        for row in cities_csv:
+        for row in csv_reader:
            if line_count == 0:
                 line_count += 1
            else :
-                cities.append(City(row.split(",")[0], row.split(",")[3], row.split(",")[4]))
+                cities.append(City(row[0], float(row[3]), float(row[4])))
                 line_count += 1 
     return cities
 
-cityreader()
+cityreader(cities)
 
 # Print the list of cities (name, lat, lon), 1 record per line.
-for c in cities:
-    print(c)
+# for c in cities:
+#     print(c)
 
 # STRETCH GOAL!
 #
@@ -80,35 +81,22 @@ for c in cities:
 def cityreader_stretch(lat1=None, lon1=None, lat2=None, lon2=None, cities=[]):
   # within will hold the cities that fall within the specified region
     within = []
-    cities = cityreader()
-    lat1 = float(input("Enter a starting latitude: "))
-    lon1 = float(input("Enter a starting longitude: "))
-    lat2 = float(input("Enter an ending latitude: "))
-    lon2 = float(input("Enter an ending longitude: "))
+    # cities = cityreader() if cities is None else cities
+    # Comment this out if running stretch test, otherwise get locked in a death loop
+    # lat1 = float(input("Enter a starting latitude: "))
+    # lon1 = float(input("Enter a starting longitude: "))
+    # lat2 = float(input("Enter an ending latitude: "))
+    # lon2 = float(input("Enter an ending longitude: "))
   # TODO Ensure that the lat and lon values are all floats
   # Go through each city and check to see if it falls within 
   # the specified coordinates.
-    range1 = [lat1, lat2] if lat1 < lat2 else [lat2, lat1]
-    range2 = [lon1, lon2] if lon1 < lon2 else [lon2, lon1]
-    print(f"You entered ({range1[0]}, {range2[0]}) to ({range1[1] + 1}, {range2[1] + 1})")
+    range1 = sorted([lat1, lat2])
+    range2 = sorted([lon1, lon2])
+    print(f"You entered ({range1[0]}, {range2[0]}) to ({range1[1]}, {range2[1]})")
     print("The following cities fall within the given range: ")
-    truthtracker1=[]
-    truthtracker2=[]
     for city in cities:
-        for num in enumerate(numpy.arange(range1[0], range1[1] + .0001, .0001, dtype=float)):
-            print(num)
-            # if float(city.lat) == num[1]:
-            #     truthtracker1.append(True)    
-            # else:
-            #     truthtracker1.append(False)
-        # for num in enumerate(numpy.arange(range2[0], range2[1] + 0.0001, 0.0001, dtype=float)):
-        #     if float(city.lon) == num[1]:
-        #         truthtracker2.append(True)
-        #     else:
-        #         truthtracker2.append(False)    
-    if True in truthtracker1 and True in truthtracker2:
-        within.append(city)
-    else:
-        pass
+        if range1[0] <= city.lat <= range1[1] and range2[0] <= city.lon <= range2[1]:
+            within.append(city)
     print(within)
-cityreader_stretch(cities)
+    return within
+# cityreader_stretch(cities)
