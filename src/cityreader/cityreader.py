@@ -88,12 +88,27 @@ def cityreader_stretch(lat1=None, lon1=None, lat2=None, lon2=None, cities=[]):
   # TODO Ensure that the lat and lon values are all floats
   # Go through each city and check to see if it falls within 
   # the specified coordinates.
-    range1 = [lat1, lat2] if (lat1) < lat2 else [lat2, lat1]
+    range1 = [lat1, lat2] if lat1 < lat2 else [lat2, lat1]
     range2 = [lon1, lon2] if lon1 < lon2 else [lon2, lon1]
+    print(f"You entered ({range1[0]}, {range2[0]}) to ({range1[1] + 1}, {range2[1] + 1})")
+    print("The following cities fall within the given range: ")
+    truthtracker1=[]
+    truthtracker2=[]
     for city in cities:
-        if city.lat in numpy.arange(range1[0], range1[1] + 0.0001, 0.0001, dtype=float) and city.lon in numpy.arange(range2[0], range2[1] + 0.0001, 0.0001, dtype=float):
-            within.append(city)
-        else:
-            pass
+        for num in enumerate(numpy.arange(range1[0], range1[1] + .0001, .0001, dtype=float)):
+            print(num)
+            # if float(city.lat) == num[1]:
+            #     truthtracker1.append(True)    
+            # else:
+            #     truthtracker1.append(False)
+        # for num in enumerate(numpy.arange(range2[0], range2[1] + 0.0001, 0.0001, dtype=float)):
+        #     if float(city.lon) == num[1]:
+        #         truthtracker2.append(True)
+        #     else:
+        #         truthtracker2.append(False)    
+    if True in truthtracker1 and True in truthtracker2:
+        within.append(city)
+    else:
+        pass
     print(within)
 cityreader_stretch(cities)
